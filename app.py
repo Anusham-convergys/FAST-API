@@ -3,9 +3,17 @@ from pydantic import BaseModel
 
 app = FastAPI()
 class Employee(BaseModel):
+    id:int
     name: str
     deptartment: str
     salary: float
+    passwword:str
+
+class EmployeeResponse(BaseModel):
+    id:int
+    name:str
+    department:str
+    
 @app.get("/")
 def home():
     return{
@@ -18,10 +26,14 @@ def add_employee(employee:Employee):
         "data" : employee
     }    
 
-@app.get("/employee/{emp_id}")
+@app.get("/employee/{emp_id}", 
+         response_model=EmployeeResponse)
 def get_employee(emp_id:int):
     return{
-        "Employee ID": emp_id
+        "id":emp_id,
+        "name":"Anusha",
+        "department":"AI",
+        "salary":90000
     }    
     
 @app.put("/employee/{emp_id}")
