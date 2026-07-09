@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 from fastapi import Path
+from fastapi import Query
 
 app = FastAPI()
 class Employee(BaseModel):
@@ -28,19 +29,17 @@ def add_employee(employee:Employee):
         "data" : employee
     }    
 
-@app.get("/employee/{emp_id}")
-def get_employee(
-
-    emp_id:int = Path(
-        gt=0,
-        lt=100,
-        description="Employee ID must be between 1 and 99"
+@app.get("/search")
+def search(
+    name: str = Query(
+        min_length=3,
+        max_length=20,
+        description="Enter employee name"
     )
-
 ):
-    return{
-        "Employee ID":emp_id
-    } 
+    return {
+        "name": name
+    }
     
 @app.put("/employee/{emp_id}")
 def update_employee(emp_id:int,employee:Employee):
