@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
+from fastapi import Path
 
 app = FastAPI()
 class Employee(BaseModel):
@@ -28,19 +29,18 @@ def add_employee(employee:Employee):
     }    
 
 @app.get("/employee/{emp_id}")
-def get_employee(emp_id: int):
+def get_employee(
 
-    if emp_id != 1:
-        raise HTTPException(
-            status_code=404,
-            detail="Employee not found"
-        )
+    emp_id:int = Path(
+        gt=0,
+        lt=100,
+        description="Employee ID must be between 1 and 99"
+    )
 
-    return {
-        "id": 1,
-        "name": "Anusha",
-        "department": "AI"
-    }   
+):
+    return{
+        "Employee ID":emp_id
+    } 
     
 @app.put("/employee/{emp_id}")
 def update_employee(emp_id:int,employee:Employee):
